@@ -22,7 +22,7 @@ def load_model(weights_file, params_file):
     return model
 
 
-class BiLSTMCRF(object):
+class BiLSTM(object):
     def __init__(self,
                  num_labels,
                  word_vocab_size,
@@ -36,7 +36,7 @@ class BiLSTMCRF(object):
                  embeddings=None,
                  use_char=True,
                  use_crf=True):
-        super(BiLSTMCRF).__init__()
+        super(BiLSTM).__init__()
         self._char_embedding_dim = char_embedding_dim
         self._word_embedding_dim = word_embedding_dim
         self._char_lstm_size = char_lstm_size
