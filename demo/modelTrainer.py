@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 from model.utils import load_data_and_labels
-from model.models import BiLSTMCRF
+from model.models import BiLSTM
 from model.preprocessing import IndexTransformer
 from model.trainer import Trainer
 
@@ -23,7 +23,7 @@ def main(args):
     p.fit(x_train, y_train)
 
     print('Building a model.')
-    model = BiLSTMCRF(char_embedding_dim=args.char_emb_size,
+    model = BiLSTM(char_embedding_dim=args.char_emb_size,
                       word_embedding_dim=args.word_emb_size,
                       char_lstm_size=args.char_lstm_units,
                       word_lstm_size=args.word_lstm_units,
