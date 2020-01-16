@@ -24,15 +24,15 @@ def main(args):
 
     print('Building a model.')
     model = BiLSTM(char_embedding_dim=args.char_emb_size,
-                      word_embedding_dim=args.word_emb_size,
-                      char_lstm_size=args.char_lstm_units,
-                      word_lstm_size=args.word_lstm_units,
-                      char_vocab_size=p.char_vocab_size,
-                      word_vocab_size=p.word_vocab_size,
-                      num_labels=p.label_size,
-                      dropout=args.dropout,
-                      use_char=args.no_char_feature,
-                      use_crf=args.no_use_crf)
+                   word_embedding_dim=args.word_emb_size,
+                   char_lstm_size=args.char_lstm_units,
+                   word_lstm_size=args.word_lstm_units,
+                   char_vocab_size=p.char_vocab_size,
+                   word_vocab_size=p.word_vocab_size,
+                   num_labels=p.label_size,
+                   dropout=args.dropout,
+                   use_char=args.no_char_feature,
+                   use_crf=args.no_use_crf)
     model, loss = model.build()
     model.compile(loss=loss, optimizer='adam')
 
@@ -46,7 +46,7 @@ def main(args):
 
 
 if __name__ == '__main__':
-    DATA_DIR = os.path.join(os.path.dirname(__file__), '../data/conll2003/hela/ner')
+    DATA_DIR = os.path.join(os.path.dirname(__file__), '../data/hela/ner')
     parser = argparse.ArgumentParser(description='Training a model')
     parser.add_argument('--train_data', default=os.path.join(DATA_DIR, 'train.txt'), help='training data')
     parser.add_argument('--valid_data', default=os.path.join(DATA_DIR, 'valid.txt'), help='validation data')
