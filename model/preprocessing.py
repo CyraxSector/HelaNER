@@ -1,12 +1,10 @@
 import re
 
 import numpy as np
-from allennlp.modules.elmo import Elmo, batch_to_ids
 from sklearn.base import BaseEstimator, TransformerMixin
 import joblib
 from keras.utils.np_utils import to_categorical
 from keras.preprocessing.sequence import pad_sequences
-
 from model.utils import Vocabulary
 
 options_file = 'https://s3-us-west-2.amazonaws.com/allennlp/models/elmo/2x4096_512_2048cnn_2xhighway/elmo_2x4096_512_2048cnn_2xhighway_options.json'
@@ -110,31 +108,3 @@ def pad_nested_sequences(sequences, dtype='int32'):
             x[i, j, :len(word)] = word
 
     return x
-
-
-class ELMoTransformer(IndexTransformer):
-    def __init__(self, lower=True, num_norm=True,
-                 use_char=True, initial_vocab=None):
-        super(ELMoTransformer, self).__init__(lower, num_norm, use_char, initial_vocab)
-        self._elmo = Elmo(options_file, weight_file, 2, dropout=0)
-
-    def transform(self, X, y=None):
-        word_ids = [self._word_vocab.doc2id(doc) for doc in X]
-        word_ids = pad_sequences(word_ids, padding='post')
-
-        char_ids = [[self._char_vocab.doc2id(w) for w in doc] for doc in X]
-        char_ids = pad_nested_sequences(char_ids)
-
-        character_ids = batch_to_ids(X)
-        elmo_embeddings = self._elmo(character_ids)['elmo_representations'][1]
-        elmo_embeddings = elmo_embeddings.detach().numpy()
-
-        features = [word_ids, char_ids, elmo_embeddings]
-
-        if y is not None:
-            y = [self._label_vocab.doc2id(doc) for doc in y]
-            y = pad_sequences(y, padding='post')
-            y = y if len(y.shape) == 3 else np.expand_dims(y, axis=0)
-            return features, y
-        else:
-            return features
