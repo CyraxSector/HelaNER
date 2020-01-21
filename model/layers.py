@@ -305,7 +305,7 @@ class CRF(Layer):
         prev_target_val = K.zeros_like(input_energy[:, 0, :])
 
         if go_backwards:
-            input_energy = K.reverse(input_energy, 1)
+            input_energy = K.reverse(input_energy, 2)
             if mask is not None:
                 mask = K.reverse(mask, 1)
 
