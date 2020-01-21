@@ -280,9 +280,6 @@ class CRF(Layer):
         return nloglik
 
     def step(self, input_energy_t, states, return_logZ=True):
-        # not in the following  `prev_target_val` has shape = (B, F)
-        # where B = batch_size, F = output feature dim
-        # Note: `i` is of float32, due to the behavior of `K.rnn`
         prev_target_val, i, chain_energy = states[:3]
         t = K.cast(i[0, 0], dtype='int32')
         if len(states) > 3:
@@ -291,21 +288,21 @@ class CRF(Layer):
             else:
                 m = K.tf.slice(states[3], [0, t], [-1, 2])
             input_energy_t = input_energy_t * K.expand_dims(m[:, 0])
-            chain_energy = chain_energy * K.expand_dims(K.expand_dims(m[:, 0] * m[:, 1]))  # (1, F, F)*(B, 1, 1) -> (B, F, F)
+            chain_energy = chain_energy * K.expand_dims(K.expand_dims(m[:, 0] * m[:, 1]))
         if return_logZ:
-            energy = chain_energy + K.expand_dims(input_energy_t - prev_target_val, 2)  # shapes: (1, B, F) + (B, F, 1) -> (B, F, F)
-            new_target_val = K.logsumexp(-energy, 1)  # shapes: (B, F)
+            energy = chain_energy + K.expand_dims(input_energy_t - prev_target_val, 2)
+            new_target_val = K.logsumexp(-energy, 1)
             return new_target_val, [new_target_val, i + 1]
         else:
             energy = chain_energy + K.expand_dims(input_energy_t + prev_target_val, 2)
             min_energy = K.min(energy, 1)
-            argmin_table = K.cast(K.argmin(energy, 1), K.floatx())  # cast for tf-version `K.rnn`
+            argmin_table = K.cast(K.argmin(energy, 1), K.floatx())
             return argmin_table, [min_energy, i + 1]
 
     def recursion(self, input_energy, mask=None, go_backwards=False, return_sequences=True, return_logZ=True, input_length=None):
         chain_energy = self.chain_kernel
-        chain_energy = K.expand_dims(chain_energy, 0)  # shape=(1, F, F): F=num of output features. 1st F is for t-1, 2nd F for t
-        prev_target_val = K.zeros_like(input_energy[:, 0, :])  # shape=(B, F), dtype=float32
+        chain_energy = K.expand_dims(chain_energy, 0)
+        prev_target_val = K.zeros_like(input_energy[:, 0, :])
 
         if go_backwards:
             input_energy = K.reverse(input_energy, 1)
@@ -359,7 +356,7 @@ class CRF(Layer):
         argmin_tables = K.cast(argmin_tables, 'int32')
 
         argmin_tables = K.reverse(argmin_tables, 1)
-        initial_best_idx = [K.expand_dims(argmin_tables[:, 0, 0])]  # matrix instead of vector is required by tf `K.rnn`
+        initial_best_idx = [K.expand_dims(argmin_tables[:, 0, 0])]
         if K.backend() == 'theano':
             initial_best_idx = [K.T.unbroadcast(initial_best_idx[0], 1)]
 
