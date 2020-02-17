@@ -22,7 +22,7 @@ def main(args):
 if __name__ == '__main__':
     SAVE_DIR = os.path.join(os.path.dirname(__file__), 'models')
     parser = argparse.ArgumentParser(description='Tagging a sentence.')
-    parser.add_argument('--sent', default='රනිල් වික්‍රමසිංහ මහතා පැවසීය.')
+    parser.add_argument('--sent', default='තමා හයිටිය අතහැර පළා ගියේ කැමැත්තකින්.')
     parser.add_argument('--save_dir', default=SAVE_DIR)
     parser.add_argument('--weights_file', default=os.path.join(SAVE_DIR, 'weights.h5'))
     parser.add_argument('--params_file', default=os.path.join(SAVE_DIR, 'params.json'))
