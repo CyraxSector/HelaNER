@@ -21,9 +21,11 @@ def main(args):
     res = tagger.analyze(args.sent)
 
     for entity in res['words']:
-        print('Entity ' + entity)
+        # noinspection PyCompatibility
+        print('Entity ' + ascii(entity))
         print(mapper.load_kb(model_path).entities)
-        if entity == mapper.load_kb(model_path).entities:
+        # noinspection PyCompatibility
+        if ascii(entity) == mapper.load_kb(model_path).entities:
             print(mapper.load_kb(model_path).entities)
 
 
