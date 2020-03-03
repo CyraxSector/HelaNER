@@ -20,13 +20,12 @@ def main(args):
     print('Tagging a sentence...')
     res = tagger.analyze(args.sent)
 
-    for entity in res['words']:
-        # noinspection PyCompatibility
-        print('Entity ' + ascii(entity))
-        print(mapper.load_kb(model_path).entities)
-        # noinspection PyCompatibility
-        if ascii(entity) == mapper.load_kb(model_path).entities:
-            print(mapper.load_kb(model_path).entities)
+    entities = []
+    for entity in res['entities']:
+        for canonical_name in mapper.load_kb(model_path).entities:
+            if canonical_name.canonical_name.lstrip('#') == entity['text']:
+                entities.append(entity['text'])
+                entities.append(" ")
 
 
 if __name__ == "__main__":
