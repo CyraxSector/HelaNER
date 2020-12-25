@@ -15,7 +15,7 @@ def tagging(sent):
 def extract_sov(data):
     chunker = RegexpParser(r'''
         NP:
-        {<JJ>*<NN.*><NNPA.*>*<NNPI.*>*<PRP.*>*}
+        {<NNPI>*<JJ>*<NNN>*<NNN><NNPA.*>*<NNPI.*>*<PRP.*>*}
         VP:
         {<JVB>*<NVB>*<V.*>*}
     ''')
