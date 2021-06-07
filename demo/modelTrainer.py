@@ -43,14 +43,15 @@ def main(args):
     print('Saving the model...')
     model.save(args.weights_file, args.params_file)
     p.save(args.preprocessor_file)
+    print('Process completed...')
 
 
 if __name__ == '__main__':
     DATA_DIR = os.path.join(os.path.dirname(__file__), '../data/hela/ner')
     parser = argparse.ArgumentParser(description='Training a model')
-    parser.add_argument('--train_data', default=os.path.join(DATA_DIR, 'train.txt'), help='training data')
-    parser.add_argument('--valid_data', default=os.path.join(DATA_DIR, 'valid.txt'), help='validation data')
-    parser.add_argument('--test_data', default=os.path.join(DATA_DIR, 'test.txt'), help='test data')
+    parser.add_argument('--train_data', default=os.path.join(DATA_DIR, 'trainIOBE.txt'), help='training data')
+    parser.add_argument('--valid_data', default=os.path.join(DATA_DIR, 'devIOBE.txt'), help='validation data')
+    parser.add_argument('--test_data', default=os.path.join(DATA_DIR, 'testIOBE.txt'), help='test data')
     parser.add_argument('--weights_file', default='weights.h5', help='weights file')
     parser.add_argument('--params_file', default='params.json', help='parameter file')
     parser.add_argument('--preprocessor_file', default='preprocessor.pickle', help='preprocessor file')
