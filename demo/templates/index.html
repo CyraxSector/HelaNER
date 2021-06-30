@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HelaNER Demo</title>
+    <style>
+        body {
+          background-color: #4f7571;
+          text-align: center;
+          color: white;
+          font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <form action = "http://localhost:5000/result" method = "post">
+        <br><br><br><br><br><br>
+        <h3>
+            HelaNER is a Bi-directional LSTM based Nested Named Entity Boundary Recognizer which supports multiple languages including Sinhala.
+        </h3>
+        <label>
+            <textarea rows="4" cols="50" placeholder="Enter your sentence here..." name="sentence"></textarea>
+        </label>
+        <input type = "submit">
+    </form>
+</body>
+</html>
