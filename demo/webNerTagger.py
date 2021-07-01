@@ -19,16 +19,7 @@ def web_runner():
     if request.method == 'POST':
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-        inputSentence = request.form['sentence']
-        SAVE_DIR = os.path.join(os.path.dirname(__file__), 'models')
-        parser = argparse.ArgumentParser(description='Tagging a sentence.')
-        #parser.add_argument('--sent', default='වාසුදේවට අහුඋනොත් ඔක්කොම ගුටි කනවා යකෝ.')
-        parser.add_argument('--sent', default=inputSentence)
-        parser.add_argument('--save_dir', default=SAVE_DIR)
-        parser.add_argument('--weights_file', default=os.path.join(SAVE_DIR, 'weights.h5'))
-        parser.add_argument('--params_file', default=os.path.join(SAVE_DIR, 'params.json'))
-        parser.add_argument('--preprocessor_file', default=os.path.join(SAVE_DIR, 'preprocessor.pickle'))
-        args = parser.parse_args()
+        args = tag_runner()
 
         model = load_model(args.weights_file, args.params_file)
         it = IndexTransformer.load(args.preprocessor_file)
@@ -36,7 +27,24 @@ def web_runner():
 
         print('Tagging a sentence...')
         result = tagger.analyze(args.sent)
-        return render_template('result.html', resultwords=result['words'], resultentities=result['entities'])
+        return render_template('result.html', resultwords=result['words'],
+                               columns=['Entity', 'Type', 'Score', 'Start Boundary Region Offset',
+                                        'End Boundary Region Offset'],
+                               items=result['entities'])
+
+
+def tag_runner():
+    inputSentence = request.form['sentence']
+    SAVE_DIR = os.path.join(os.path.dirname(__file__), 'models')
+    parser = argparse.ArgumentParser(description='Tagging a sentence.')
+    # parser.add_argument('--sent', default='වාසුදේවට අහුඋනොත් ඔක්කොම ගුටි කනවා යකෝ.')
+    parser.add_argument('--sent', default=inputSentence)
+    parser.add_argument('--save_dir', default=SAVE_DIR)
+    parser.add_argument('--weights_file', default=os.path.join(SAVE_DIR, 'weights.h5'))
+    parser.add_argument('--params_file', default=os.path.join(SAVE_DIR, 'params.json'))
+    parser.add_argument('--preprocessor_file', default=os.path.join(SAVE_DIR, 'preprocessor.pickle'))
+    args = parser.parse_args()
+    return args
 
 
 if __name__ == '__main__':
