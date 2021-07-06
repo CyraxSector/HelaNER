@@ -30,6 +30,7 @@
 
          <tbody>
          {%- for row in items %}
+         {% set _dummy = row.pop("score") %}
             <tr>
             {%- for value in row.values() %}
                 <td>{{ value }}</td>
