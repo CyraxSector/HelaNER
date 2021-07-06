@@ -28,7 +28,7 @@ def web_runner():
         print('Tagging a sentence...')
         result = tagger.analyze(args.sent)
         return render_template('result.html', resultwords=result['words'],
-                               columns=['Entity', 'Type', 'Score', 'Start Boundary Region Offset',
+                               columns=['Entity', 'Type', 'Start Boundary Region Offset',
                                         'End Boundary Region Offset'],
                                items=result['entities'])
 
